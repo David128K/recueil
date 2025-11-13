@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 
 type Option = {
   value: string;
@@ -23,12 +23,11 @@ export default function CustomSelect({
   className = '',
 }: CustomSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedLabel, setSelectedLabel] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  const selectedLabel = useMemo(() => {
     const selected = options.find((opt) => opt.value === value);
-    setSelectedLabel(selected ? selected.label : placeholder);
+    return selected ? selected.label : placeholder;
   }, [value, options, placeholder]);
 
   useEffect(() => {

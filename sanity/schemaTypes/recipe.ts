@@ -31,6 +31,12 @@ export const recipe = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'video',
+      title: 'Video (optional)',
+      description: 'Video hochladen. Wenn ein Video hinzugefügt wird, wird es anstelle des Hauptbildes oben auf der Rezeptseite angezeigt.',
+      type: 'mux.video',
+    }),
+    defineField({
       name: 'category',
       title: 'Kategorie',
       type: 'reference',
@@ -71,75 +77,14 @@ export const recipe = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'ingredients',
-      title: 'Zutaten',
+      name: 'content',
+      title: 'Inhalt',
+      description: 'Text, Zutaten und Zubereitungsschritte in beliebiger Reihenfolge',
       type: 'array',
       of: [
-        {
-          type: 'object',
-          fields: [
-            { 
-              name: 'amount', 
-              type: 'number', 
-              title: 'Menge',
-              validation: (Rule) => Rule.required().min(0),
-            },
-            { 
-              name: 'unit', 
-              type: 'string', 
-              title: 'Einheit',
-              options: {
-                list: [
-                  { title: 'g (Gramm)', value: 'g' },
-                  { title: 'kg (Kilogramm)', value: 'kg' },
-                  { title: 'ml (Milliliter)', value: 'ml' },
-                  { title: 'l (Liter)', value: 'l' },
-                  { title: 'TL (Teelöffel)', value: 'TL' },
-                  { title: 'EL (Esslöffel)', value: 'EL' },
-                  { title: 'Stück', value: 'Stück' },
-                  { title: 'Prise', value: 'Prise' },
-                  { title: 'Tasse', value: 'Tasse' },
-                  { title: 'Bund', value: 'Bund' },
-                  { title: 'Packung', value: 'Packung' },
-                  { title: 'nach Geschmack', value: 'nach Geschmack' },
-                ],
-              },
-              validation: (Rule) => Rule.required(),
-            },
-            { 
-              name: 'name', 
-              type: 'string', 
-              title: 'Name der Zutat',
-              validation: (Rule) => Rule.required(),
-            },
-          ],
-          preview: {
-            select: {
-              amount: 'amount',
-              unit: 'unit',
-              name: 'name',
-            },
-            prepare({ amount, unit, name }) {
-              return {
-                title: `${amount} ${unit} ${name}`,
-              };
-            },
-          },
-        },
-      ],
-      validation: (Rule) => Rule.required().min(1),
-    }),
-    defineField({
-      name: 'steps',
-      title: 'Zubereitungsschritte',
-      type: 'array',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            { name: 'step', type: 'text', title: 'Schritt', rows: 3 },
-          ],
-        },
+        { type: 'textBlock' },
+        { type: 'ingredientsBlock' },
+        { type: 'stepsBlock' },
       ],
       validation: (Rule) => Rule.required().min(1),
     }),

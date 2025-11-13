@@ -1,67 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { client } from '../../../../sanity/lib/client';
-
-const RECIPES_PER_PAGE = 12;
+import { getRecipes } from '@/lib/sanity/queries';
+import { RECIPES_PER_PAGE } from '@/constants';
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const searchParams = request.nextUrl.searchParams;
-  const lastPublishedAt = searchParams.get('lastPublishedAt');
-  const search = searchParams.get('search');
-  const category = searchParams.get('category');
-  const difficulty = searchParams.get('difficulty');
-  const sort = searchParams.get('sort') || 'newest';
-
+  
   try {
-    // Build GROQ query
-    let filter = `*[_type == "recipe"`;
+    const recipes = await getRecipes({
+      lastPublishedAt: searchParams.get('lastPublishedAt') || undefined,
+      search: searchParams.get('search') || undefined,
+      category: searchParams.get('category') || undefined,
+      difficulty: searchParams.get('difficulty') || undefined,
+      sort: searchParams.get('sort') || 'newest',
+    });
 
-    // Add search filter
-    if (search) {
-      filter += ` && (title match "${search}*" || description match "${search}*")`;
-    }
-
-    // Add category filter
-    if (category) {
-      filter += ` && category._ref == "${category}"`;
-    }
-
-    // Add difficulty filter
-    if (difficulty) {
-      filter += ` && difficulty == "${difficulty}"`;
-    }
-
-    // Add pagination filter
-    if (lastPublishedAt) {
-      if (sort === 'oldest') {
-        filter += ` && publishedAt > "${lastPublishedAt}"`;
-      } else {
-        filter += ` && publishedAt < "${lastPublishedAt}"`;
-      }
-    }
-
-    filter += `]`;
-
-    // Add sorting
-    const orderBy = sort === 'oldest' ? 'publishedAt asc' : 'publishedAt desc';
-
-    // Build full query
-    const query = `${filter} | order(${orderBy}) [0...${RECIPES_PER_PAGE}] {
-      _id,
-      title,
-      slug,
-      description,
-      mainImage,
-      category->{
-        name,
-        slug
-      },
-      prepTime,
-      servings,
-      difficulty,
-      publishedAt
-    }`;
-
-    const recipes = await client.fetch(query);
     const hasMore = recipes.length === RECIPES_PER_PAGE;
     const lastDate = recipes.length > 0 ? recipes[recipes.length - 1].publishedAt : null;
 

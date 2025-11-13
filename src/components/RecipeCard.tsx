@@ -1,22 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { urlFor } from '../../sanity/lib/image';
+import type { RecipeCard as RecipeCardType } from '@/types';
 
 type RecipeCardProps = {
-  recipe: {
-    _id: string;
-    title: string;
-    slug: { current: string };
-    description: string;
-    mainImage: any;
-    category: {
-      name: string;
-      slug: { current: string };
-    };
-    prepTime: number;
-    servings: number;
-    difficulty: 'einfach' | 'fortgeschritten' | 'professionell';
-  };
+  recipe: RecipeCardType;
 };
 
 export default function RecipeCard({ recipe }: RecipeCardProps) {

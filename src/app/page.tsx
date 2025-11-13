@@ -1,61 +1,12 @@
 import { Suspense } from 'react';
-import { client } from '../../sanity/lib/client';
 import Header from '@/components/Header';
 import RecipeGrid from '@/components/RecipeGrid';
-
-const RECIPES_PER_PAGE = 12;
+import { getRecipes, getCategories } from '@/lib/sanity/queries';
+import { RECIPES_PER_PAGE } from '@/constants';
 
 type PageProps = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
-
-async function getRecipes(search?: string, category?: string, difficulty?: string, sort?: string) {
-  let filter = `*[_type == "recipe"`;
-
-  if (search) {
-    filter += ` && (title match "${search}*" || description match "${search}*")`;
-  }
-
-  if (category) {
-    filter += ` && category._ref == "${category}"`;
-  }
-
-  if (difficulty) {
-    filter += ` && difficulty == "${difficulty}"`;
-  }
-
-  filter += `]`;
-
-  const orderBy = sort === 'oldest' ? 'publishedAt asc' : 'publishedAt desc';
-
-  const query = `${filter} | order(${orderBy}) [0...${RECIPES_PER_PAGE}] {
-    _id,
-    title,
-    slug,
-    description,
-    mainImage,
-    category->{
-      name,
-      slug
-    },
-    prepTime,
-    servings,
-    difficulty,
-    publishedAt
-  }`;
-
-  return await client.fetch(query);
-}
-
-async function getCategories() {
-  const query = `*[_type == "category"] | order(name asc) {
-    _id,
-    name,
-    slug
-  }`;
-
-  return await client.fetch(query);
-}
 
 export default async function Home({ searchParams }: PageProps) {
   const params = await searchParams;
@@ -65,7 +16,7 @@ export default async function Home({ searchParams }: PageProps) {
   const sort = typeof params.sort === 'string' ? params.sort : 'newest';
 
   const [recipes, categories] = await Promise.all([
-    getRecipes(search, category, difficulty, sort),
+    getRecipes({ search, category, difficulty, sort }),
     getCategories(),
   ]);
 

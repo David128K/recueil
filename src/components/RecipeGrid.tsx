@@ -2,24 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react';
 import RecipeCard from './RecipeCard';
-
-type Recipe = {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  description: string;
-  mainImage: any;
-  category: {
-    name: string;
-    slug: { current: string };
-  };
-  prepTime: number;
-  servings: number;
-  difficulty: 'einfach' | 'fortgeschritten' | 'professionell';
-};
+import type { RecipeCard as RecipeCardType } from '@/types';
 
 type RecipeGridProps = {
-  initialRecipes: Recipe[];
+  initialRecipes: RecipeCardType[];
   hasMore: boolean;
   lastPublishedAt: string | null;
   searchParams: {
@@ -31,7 +17,7 @@ type RecipeGridProps = {
 };
 
 export default function RecipeGrid({ initialRecipes, hasMore, lastPublishedAt, searchParams }: RecipeGridProps) {
-  const [recipes, setRecipes] = useState<Recipe[]>(initialRecipes);
+  const [recipes, setRecipes] = useState<RecipeCardType[]>(initialRecipes);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMoreRecipes, setHasMoreRecipes] = useState(hasMore);
   const [lastDate, setLastDate] = useState(lastPublishedAt);

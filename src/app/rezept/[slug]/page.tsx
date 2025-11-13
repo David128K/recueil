@@ -2,53 +2,14 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { client } from '../../../../sanity/lib/client';
 import { urlFor } from '../../../../sanity/lib/image';
-import PortionCalculator from '@/components/PortionCalculator';
+import RecipeContent from '@/components/RecipeContent';
+import MuxVideoPlayer from '@/components/MuxVideoPlayer';
+import { getRecipe } from '@/lib/sanity/queries';
 
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
-
-type Recipe = {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  description: string;
-  mainImage: any;
-  category: {
-    name: string;
-    slug: { current: string };
-  };
-  prepTime: number;
-  servings: number;
-  difficulty: 'einfach' | 'fortgeschritten' | 'professionell';
-  ingredients: Array<{ amount: number; unit: string; name: string }>;
-  steps: Array<{ step: string }>;
-  publishedAt: string;
-};
-
-async function getRecipe(slug: string): Promise<Recipe | null> {
-  const query = `*[_type == "recipe" && slug.current == $slug][0] {
-    _id,
-    title,
-    slug,
-    description,
-    mainImage,
-    category->{
-      name,
-      slug
-    },
-    prepTime,
-    servings,
-    difficulty,
-    ingredients,
-    steps,
-    publishedAt
-  }`;
-
-  return await client.fetch(query, { slug });
-}
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
@@ -98,22 +59,30 @@ export default async function RecipePage({ params }: PageProps) {
 
       <main className="max-w-4xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
         <article className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 animate-slideUp">
-          {/* Hero Image */}
-          <div className="relative w-full aspect-[16/9]">
-            <Image
-              src={urlFor(recipe.mainImage).width(1200).height(675).url()}
-              alt={recipe.title}
-              fill
-              className="object-cover"
-              priority
-              sizes="(max-width: 1024px) 100vw, 1024px"
+          {/* Hero Video or Image */}
+          {recipe.video?.asset?.playbackId ? (
+            <MuxVideoPlayer
+              playbackId={recipe.video.asset.playbackId}
+              thumbTime={recipe.video.asset.thumbTime}
+              categoryName={recipe.category.name}
             />
-            <div className="absolute top-5 left-5">
-              <span className="inline-block px-4 py-2 text-sm font-semibold text-white bg-[var(--color-accent)] rounded-full shadow-md">
-                {recipe.category.name}
-              </span>
+          ) : (
+            <div className="relative w-full aspect-[16/9]">
+              <Image
+                src={urlFor(recipe.mainImage).width(1200).height(675).url()}
+                alt={recipe.title}
+                fill
+                className="object-cover"
+                priority
+                sizes="(max-width: 1024px) 100vw, 1024px"
+              />
+              <div className="absolute top-5 left-5">
+                <span className="inline-block px-4 py-2 text-sm font-semibold text-white bg-[var(--color-accent)] rounded-full shadow-md">
+                  {recipe.category.name}
+                </span>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Content */}
           <div className="p-8 sm:p-10">
@@ -147,29 +116,26 @@ export default async function RecipePage({ params }: PageProps) {
               </div>
             </div>
 
-            {/* Ingredients with Portion Calculator */}
-            <PortionCalculator 
+            {/* Recipe Content with Portion Adjuster and Modular Blocks */}
+            <RecipeContent
+              content={recipe.content}
               originalServings={recipe.servings}
-              ingredients={recipe.ingredients}
             />
 
-            {/* Steps */}
-            <section>
-              <h2 className="text-2xl font-bold text-[var(--color-secondary)] mb-6 flex items-center gap-3">
-                <span className="w-1 h-8 bg-[var(--color-accent)] rounded-full"></span>
-                Zubereitung
-              </h2>
-              <ol className="space-y-6">
-                {recipe.steps.map((step, index) => (
-                  <li key={index} className="flex gap-5 group">
-                    <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-[var(--color-accent)] text-white font-bold text-sm shadow-md group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
-                      {index + 1}
-                    </span>
-                    <p className="text-[var(--color-text-muted)] pt-2 leading-relaxed">{step.step}</p>
-                  </li>
-                ))}
-              </ol>
-            </section>
+            {/* Main Image at the end if video exists */}
+            {recipe.video?.asset?.playbackId && (
+              <div className="mt-10 pt-10 border-t border-gray-200">
+                <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden shadow-md">
+                  <Image
+                    src={urlFor(recipe.mainImage).width(1200).height(675).url()}
+                    alt={recipe.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 1024px"
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </article>
       </main>
