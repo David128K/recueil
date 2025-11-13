@@ -14,7 +14,7 @@ type RecipeContentProps = {
 export default function RecipeContent({
   content,
   originalServings,
-}: RecipeContentProps): JSX.Element {
+}: RecipeContentProps) {
   const [currentServings, setCurrentServings] = useState(originalServings);
 
   // Check if there are any ingredient blocks

@@ -12,7 +12,7 @@ export default function MuxVideoPlayer({
   playbackId,
   thumbTime,
   categoryName,
-}: MuxVideoPlayerProps): JSX.Element {
+}: MuxVideoPlayerProps) {
   return (
     <div className="relative w-full aspect-[16/9]">
       <MuxPlayer

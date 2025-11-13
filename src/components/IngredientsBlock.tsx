@@ -14,7 +14,7 @@ export default function IngredientsBlock({
   ingredients,
   originalServings,
   currentServings,
-}: IngredientsBlockProps): JSX.Element {
+}: IngredientsBlockProps) {
   const calculateAmount = (originalAmount: string): string => {
     const amount = parseFloat(originalAmount) || 0;
     if (amount === 0) return '';

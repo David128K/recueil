@@ -5,16 +5,16 @@ import { useEffect, useState } from 'react';
 import FilterChip from './FilterChip';
 
 type Option = {
-  value: string;
-  label: string;
+  readonly value: string;
+  readonly label: string;
 };
 
 type FilterModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  categoryOptions: Option[];
-  difficultyOptions: Option[];
-  sortOptions: Option[];
+  categoryOptions: readonly Option[];
+  difficultyOptions: readonly Option[];
+  sortOptions: readonly Option[];
   selectedCategory: string;
   selectedDifficulty: string;
   selectedSort: string;

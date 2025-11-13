@@ -7,6 +7,10 @@ import RecipeContent from '@/components/RecipeContent';
 import MuxVideoPlayer from '@/components/MuxVideoPlayer';
 import { getRecipe } from '@/lib/sanity/queries';
 
+// Force dynamic rendering to avoid build-time data fetching issues
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 type PageProps = {
   params: Promise<{ slug: string }>;
 };

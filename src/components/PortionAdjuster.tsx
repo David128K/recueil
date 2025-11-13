@@ -10,16 +10,16 @@ type PortionAdjusterProps = {
 export default function PortionAdjuster({
   originalServings,
   onServingsChange,
-}: PortionAdjusterProps): JSX.Element {
+}: PortionAdjusterProps) {
   const [currentServings, setCurrentServings] = useState(originalServings);
 
-  const increment = (): void => {
+  const increment = () => {
     const newServings = currentServings + 1;
     setCurrentServings(newServings);
     onServingsChange(newServings);
   };
 
-  const decrement = (): void => {
+  const decrement = () => {
     if (currentServings > 1) {
       const newServings = currentServings - 1;
       setCurrentServings(newServings);

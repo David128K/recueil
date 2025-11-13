@@ -10,7 +10,7 @@ type StepsBlockProps = {
   steps: Step[];
 };
 
-export default function StepsBlock({ title, steps }: StepsBlockProps): JSX.Element {
+export default function StepsBlock({ title, steps }: StepsBlockProps) {
   const [showImages, setShowImages] = useState(true);
   
   // Check if any step has an image

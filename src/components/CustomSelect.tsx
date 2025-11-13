@@ -3,12 +3,12 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 
 type Option = {
-  value: string;
-  label: string;
+  readonly value: string;
+  readonly label: string;
 };
 
 type CustomSelectProps = {
-  options: Option[];
+  options: readonly Option[];
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;

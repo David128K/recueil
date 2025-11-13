@@ -22,7 +22,8 @@
     "react-modal-sheet": "^5.2.1",
     "sanity": "^4.15.0",
     "sanity-plugin-mux-input": "^2.11.1",
-    "styled-components": "^6.1.19"
+    "styled-components": "^6.1.19",
+    "vercel": "^48.9.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.17",
