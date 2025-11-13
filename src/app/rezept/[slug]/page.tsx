@@ -41,7 +41,7 @@ export default async function RecipePage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--color-dominant)] animate-fadeIn">
+    <div className="min-h-screen bg-[var(--color-dominant)]">
       {/* Header */}
       <header className="bg-[var(--color-dominant-light)]/95 backdrop-blur-md border-b border-[var(--color-secondary-light)] shadow-sm sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-5 sm:px-6 lg:px-8">
@@ -58,7 +58,7 @@ export default async function RecipePage({ params }: PageProps) {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
-        <article className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 animate-slideUp">
+        <article className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100">
           {/* Hero Video or Image */}
           {recipe.video?.asset?.playbackId ? (
             <MuxVideoPlayer

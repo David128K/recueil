@@ -65,9 +65,9 @@ export default function IngredientsBlock({
       </div>
 
       {currentServings !== originalServings && (
-        <div className="mt-3 text-center animate-slideUp">
+        <div className="mt-3 text-center">
           <p className="text-sm text-[var(--color-text-muted)] bg-[var(--color-accent-light)] px-4 py-2 rounded-lg inline-block">
-            💡 Angepasst von {originalServings} auf {currentServings}{' '}
+            Angepasst von {originalServings} auf {currentServings}{' '}
             {currentServings === 1 ? 'Portion' : 'Portionen'}
           </p>
         </div>

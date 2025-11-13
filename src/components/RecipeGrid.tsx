@@ -87,16 +87,9 @@ export default function RecipeGrid({ initialRecipes, hasMore, lastPublishedAt, s
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 animate-fadeIn">
-        {recipes.map((recipe, index) => (
-          <div
-            key={recipe._id}
-            className="animate-slideUp"
-            style={{
-              animationDelay: `${index * 50}ms`,
-              animationFillMode: 'backwards'
-            }}
-          >
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {recipes.map((recipe) => (
+          <div key={recipe._id}>
             <RecipeCard recipe={recipe} />
           </div>
         ))}
@@ -120,41 +113,11 @@ export default function RecipeGrid({ initialRecipes, hasMore, lastPublishedAt, s
         <div className="text-center py-12">
           <div className="inline-block px-6 py-3 bg-gray-50 rounded-full">
             <p className="text-sm text-[var(--color-text-muted)] font-medium">
-              ✨ Alle Rezepte geladen
+              Alle Rezepte geladen
             </p>
           </div>
         </div>
       )}
-
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-
-        @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .animate-fadeIn {
-          animation: fadeIn 600ms ease-out;
-        }
-
-        .animate-slideUp {
-          animation: slideUp 500ms cubic-bezier(0.16, 1, 0.3, 1);
-        }
-      `}</style>
     </>
   );
 }

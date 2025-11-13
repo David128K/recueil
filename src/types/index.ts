@@ -81,4 +81,4 @@ export type Recipe = {
   publishedAt: string;
 };
 
-export type RecipeCard = Pick<Recipe, '_id' | 'title' | 'slug' | 'description' | 'mainImage' | 'category' | 'prepTime' | 'servings' | 'difficulty'>;
+export type RecipeCard = Pick<Recipe, '_id' | 'title' | 'slug' | 'description' | 'mainImage' | 'category' | 'prepTime' | 'servings' | 'difficulty' | 'publishedAt'>;
